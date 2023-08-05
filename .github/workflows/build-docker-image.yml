@@ -38,12 +38,21 @@ jobs:
         push: true
         tags: |
           tawfiq58/my-app:${{ steps.vars.outputs.tag }}
-    
+
+    - name: Configure Git
+      run: |
+        git config user.name "$GITHUB_ACTOR"
+        git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+    - name: Install Helm
+      uses: azure/setup-helm@v3
+
     - name: Package and release charts
       uses: helm/chart-releaser-action@v1.5.0
       with:
-        charts_dir: ./infra/k8s/helm/
+        charts_dir: ./infra/k8s/helm/frontend
         config: |
           image.tag=${{ steps.vars.outputs.tag }}
       env:
         CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
