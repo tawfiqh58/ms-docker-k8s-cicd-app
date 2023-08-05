@@ -1,0 +1,60 @@
+name: Update Helm Chart
+
+on:
+  pull_request:
+    branches: ['dev']
+    paths:
+      - 'my-app/**'
+
+jobs:
+  update_chart:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Set up variables
+        id: vars
+        run: echo ::set-output name=tag::$(git describe --tags --always)
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./my-app
+          push: true
+          tags: |
+            tawfiq58/my-app:${{ steps.vars.outputs.tag }}
+
+      - name: Clone Second Repository
+        uses: actions/checkout@v2
+        with:
+          repository: https://github.com/tawfiqh58/my-chart
+          ref: main
+          token: ${{ secrets.CHART_REPO_ACCESS_TOKEN }}
+
+      - name: Update Helm Chart
+        run: |
+          cd my-chart/charts/my-chart
+          CURRENT_VERSION=$(grep 'version:' Chart.yaml | awk '{print $2}')
+          MAJOR=$(echo $CURRENT_VERSION | cut -d'.' -f1)
+          MINOR=$(echo $CURRENT_VERSION | cut -d'.' -f2)
+          PATCH=$(echo $CURRENT_VERSION | cut -d'.' -f3)
+          NEW_VERSION="$MAJOR.$((MINOR + 1)).$PATCH"
+          sed -i "s/version: $CURRENT_VERSION/version: $NEW_VERSION/" Chart.yaml
+          sed -i "s/appVersion:.*/appVersion: ${{ steps.vars.outputs.tag }}/" Chart.yaml
+
+      - name: Commit and Push Changes
+        run: |
+          cd my-chart/charts/my-chart
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git add .
+          git commit -m "Update Helm chart"
+          git push
