@@ -31,11 +31,6 @@ jobs:
           sed -i "s/version: $CURRENT_VERSION/version: $NEW_VERSION/" Chart.yaml
           sed -i "s/appVersion:.*/appVersion: ${{ steps.vars.outputs.tag }}/" Chart.yaml
 
-      - name: Set up Git
-        run: |
-          git config user.name "tawfiqh58"
-          git config user.email "tawfiqhasan58@gmail.com"
-
       - name: Commit and Push Changes
         run: |
           cd my-chart
@@ -43,5 +38,7 @@ jobs:
           git fetch
           git pull origin main
           git add .
+          git config user.name "tawfiqh58"
+          git config user.email "tawfiqhasan58@gmail.com"
           git commit -m "Update Helm chart"
           git push origin main
