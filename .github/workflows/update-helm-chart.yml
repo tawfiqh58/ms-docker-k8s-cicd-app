@@ -31,7 +31,7 @@ jobs:
             tawfiq58/my-app:${{ steps.vars.outputs.tag }}
 
       - name: Clone Second Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: https://github.com/tawfiqh58/my-chart
           ref: main
