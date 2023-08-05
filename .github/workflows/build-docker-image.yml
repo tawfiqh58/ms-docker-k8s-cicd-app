@@ -40,7 +40,7 @@ jobs:
           tawfiq58/my-app:${{ steps.vars.outputs.tag }}
     
     - name: Package and release charts
-      uses: helm/chart-releaser-action@v1.6.0
+      uses: helm/chart-releaser-action@v1.5.0
       with:
         charts_dir: ./infra/k8s/helm/frontend
         config: |
