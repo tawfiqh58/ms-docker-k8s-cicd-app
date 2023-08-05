@@ -33,8 +33,8 @@ jobs:
 
       - name: Set up Git
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
+          git config user.name "tawfiqh58"
+          git config user.email "tawfiqhasan58@gmail.com"
 
       - name: Commit and Push Changes
         run: |
