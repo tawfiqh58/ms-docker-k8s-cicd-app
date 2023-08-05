@@ -9,9 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v2
-
       - name: Set up variables
         id: vars
         run: echo ::set-output name=tag::$(git describe --tags --always)
@@ -21,6 +18,7 @@ jobs:
         with:
           repository: tawfiqh58/my-chart
           ref: main
+          path: my-chart
 
       - name: Update Helm Chart
         run: |
