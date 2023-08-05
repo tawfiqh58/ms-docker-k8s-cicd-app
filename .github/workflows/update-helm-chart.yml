@@ -34,9 +34,7 @@ jobs:
       - name: Commit and Push Changes
         run: |
           cd my-chart
-          git remote set-url origin https://${{ secrets.CHART_REPO_ACCESS_TOKEN }}@github.com/tawfiqh58/my-chart
-          git fetch
-          git pull origin main
+          git remote set-url origin https://${{secrets.CHART_REPO_ACCESS_TOKEN}}@github.com/tawfiqh58/my-chart
           git add .
           git config user.name "tawfiqh58"
           git config user.email "tawfiqhasan58@gmail.com"
