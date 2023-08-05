@@ -21,7 +21,7 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:
-        context: .
+        context: ./my-app
         push: true
         tags: |
           tawfiq58/my-app:${{ steps.vars.outputs.tag }}
