@@ -9,22 +9,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up variables
-        id: vars
-        run: echo ::set-output name=tag::$(git describe --tags --always)
-
-      - name: Check id
-        run: echo "${{ steps.vars.outputs.tag }}"
-
-      - name: Check secret
-        run: echo "${{ secrets.CHART_REPO_ACCESS_TOKEN }}"
-
       - name: Clone Second Repository
         uses: actions/checkout@v3
         with:
           repository: tawfiqh58/my-chart
           ref: main
           path: my-chart
+      
+      - name: Set up variables
+        id: vars
+        run: echo ::set-output name=tag::$(git describe --tags --always)
 
       - name: Update Helm Chart
         run: |
@@ -39,10 +33,12 @@ jobs:
           cat Chart.yaml
 
       - name: Commit and Push Changes
+        env:
+          CHART_REPO_ACCESS_TOKEN: ${{ secrets.CHART_REPO_ACCESS_TOKEN }}
         run: |
           cd my-chart
-          echo https://${{secrets.CHART_REPO_ACCESS_TOKEN}}@github.com/tawfiqh58/my-chart
-          git remote set-url origin https://${{secrets.CHART_REPO_ACCESS_TOKEN}}@github.com/tawfiqh58/my-chart
+          echo https://$CHART_REPO_ACCESS_TOKEN@github.com/tawfiqh58/my-chart
+          git remote set-url origin https://$CHART_REPO_ACCESS_TOKEN@github.com/tawfiqh58/my-chart
           git add .
           git config user.name "tawfiqh58"
           git config user.email "tawfiqhasan58@gmail.com"
