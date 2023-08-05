@@ -9,7 +9,7 @@ class App extends Component {
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to Frontend.</h2>
-          <p>With Helm repo at: https://github.com/tawfiqh58/ms-docker-k8s-cicd-app/ page</p>
+          <p>With automatic Helm package creation and upload to the gh-pages Helm repo at: https://github.com/tawfiqh58/ms-docker-k8s-cicd-app/ page</p>
         </div>
       </div>
     );
