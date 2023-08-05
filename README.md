@@ -1,3 +1,3 @@
-# Microservice application with CICD pipeline
+# HELM repository
 
-This is a demo microservice application with a complete DevOps pipeline
+This is the helm repository for this github project
