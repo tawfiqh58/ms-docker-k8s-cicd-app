@@ -19,9 +19,8 @@ jobs:
       - name: Clone Second Repository
         uses: actions/checkout@v3
         with:
-          repository: https://github.com/tawfiqh58/my-chart
+          repository: tawfiqh58/my-chart
           ref: main
-          token: ${{ secrets.CHART_REPO_ACCESS_TOKEN }}
 
       - name: Update Helm Chart
         run: |
@@ -37,9 +36,21 @@ jobs:
       - name: Commit and Push Changes
         run: |
           cd my-chart/charts/my-chart
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
           git add .
           git commit -m "Update Helm chart"
           git push
-    
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
+      - name: Commit and Push Changes
+        run: |
+          cd my-chart
+          git remote set-url origin https://${{ secrets.CHART_REPO_ACCESS_TOKEN }}@github.com/tawfiqh58/my-chart
+          git fetch
+          git pull origin main
+          git add .
+          git commit -m "Update Helm chart"
+          git push origin main
