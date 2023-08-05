@@ -31,13 +31,6 @@ jobs:
           sed -i "s/version: $CURRENT_VERSION/version: $NEW_VERSION/" Chart.yaml
           sed -i "s/appVersion:.*/appVersion: ${{ steps.vars.outputs.tag }}/" Chart.yaml
 
-      - name: Commit and Push Changes
-        run: |
-          cd my-chart/charts/my-chart
-          git add .
-          git commit -m "Update Helm chart"
-          git push
-
       - name: Set up Git
         run: |
           git config user.name "github-actions"
