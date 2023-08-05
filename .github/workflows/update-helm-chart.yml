@@ -40,8 +40,8 @@ jobs:
           git add .
           git config --global user.name "tawfiqh58"
           git config --global user.email "tawfiqhasan58@gmail.com"
-          git remote add destination_repo https://github.com/tawfiqh58/my-chart.git
-          git push destination_repo HEAD:main --force
+          git remote add destination_repo https://github.com/tawfiqh58/my-chart
+          git push destination_repo HEAD:main --force --quiet
         env:
           ACCESS_TOKEN: ${{ secrets.CHART_REPO_ACCESS_TOKEN }}
           GIT_ASKPASS: /usr/bin/true
