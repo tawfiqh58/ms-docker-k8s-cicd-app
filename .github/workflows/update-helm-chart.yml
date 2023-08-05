@@ -29,22 +29,22 @@ jobs:
           PATCH=$(echo $CURRENT_VERSION | cut -d'.' -f3)
           NEW_VERSION="$MAJOR.$MINOR.$((PATCH + 1))"
           sed -i "s/version: $CURRENT_VERSION/version: $NEW_VERSION/" Chart.yaml
-          sed -i "s/appVersion:.*/appVersion: ${{ steps.vars.outputs.tag }}/" Chart.yaml
+          GENERATED_HASH=$(cat $GITHUB_EVENT_PATH | jq -r '.after')
+          sed -i "s/appVersion:.*/appVersion: $GENERATED_HASH/" Chart.yaml
           cat Chart.yaml
 
-      - name: Commit and Push Changes
-        env:
-          CHART_REPO_ACCESS_TOKEN: ${{ secrets.CHART_REPO_ACCESS_TOKEN }}
+      
+      - name: Push to Another Repository
         run: |
           cd my-chart
-          echo https://$CHART_REPO_ACCESS_TOKEN@github.com/tawfiqh58/my-chart
-          git remote set-url origin https://$CHART_REPO_ACCESS_TOKEN@github.com/tawfiqh58/my-chart
           git add .
-          git config user.name "tawfiqh58"
-          git config user.email "tawfiqhasan58@gmail.com"
-          git commit -m "Update Helm chart"
-          git push origin main
-      
+          git config --global user.name "tawfiqh58"
+          git config --global user.email "tawfiqhasan58@gmail.com"
+          git remote add destination_repo https://github.com/tawfiqh58/my-chart.git
+          git push destination_repo HEAD:main --force
+        env:
+          ACCESS_TOKEN: ${{ secrets.CHART_REPO_ACCESS_TOKEN }}
+
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
