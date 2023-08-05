@@ -13,6 +13,12 @@ jobs:
         id: vars
         run: echo ::set-output name=tag::$(git describe --tags --always)
 
+      - name: Check id
+        run: echo ${{ steps.vars.outputs.tag }}
+
+      - name: Check secret
+        run: echo ${{ secrets.CHART_REPO_ACCESS_TOKEN }}
+
       - name: Clone Second Repository
         uses: actions/checkout@v3
         with:
