@@ -10,7 +10,7 @@ on:
     branches: [ "dev" ]
     paths:
       - 'my-app/**'
-      
+
 jobs:
 
   build:
@@ -40,10 +40,10 @@ jobs:
           tawfiq58/my-app:${{ steps.vars.outputs.tag }}
     
     - name: Package and release charts
-      uses: helm/chart-releaser-action@v1.2.1
+      uses: helm/chart-releaser-action@v1.6.0
       with:
         charts_dir: ./infra/k8s/helm/frontend
-        owner: ${{ github.repository_owner }}
-        token: ${{ secrets.GITHUB_TOKEN }}
         config: |
           image.tag=${{ steps.vars.outputs.tag }}
+      env:
+        CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
